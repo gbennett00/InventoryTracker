@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import *
+from tkinter import Tk, StringVar, OptionMenu
 from tkinter import ttk
 
 import sqlite3
