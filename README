@@ -1,0 +1,4 @@
+This is a project for ENGR1110 developed by Garrett Bennett, Riley Matthews, Aden Harmon, and Logan Slaick. 
+This program tracks a company's inventory at certain locations using SQLite and provides a GUI developed 
+Tkinter with the option to view inventory at a specific location, add a new location, add invetory to a location, 
+transfer items, and record damaged/lost items. 
