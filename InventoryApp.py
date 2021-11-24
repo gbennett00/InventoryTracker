@@ -1,9 +1,9 @@
 import tkinter
-from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, OptionMenu, Tk, StringVar
 
 import sqlite3
 from sqlite3 import OperationalError, IntegrityError
+
 
 def add_store(*args):
     try:
@@ -39,7 +39,7 @@ def add_items(name, quantity, store):
         else:
             print('Please select a store.')
         return
-    except IntegrityError as ie:
+    except IntegrityError:
         print(f'Location {store} is empty.')
 
     print(f'{val[1]} {val[0]} added to {sql_strip(store)}')
@@ -114,17 +114,17 @@ def create_display_menu(tab, drop_menu):
     nm = []
     for i in get_store_names():
         nm.append(i)
-    if (len(nm) == 0):
+    if len(nm) == 0:
         return OptionMenu(tab, drop_menu, 'No stores created')
-    elif (drop_menu == selected_loc):
+    elif drop_menu == selected_loc:
         return OptionMenu(tab, drop_menu, *nm,
                           command=display_store_information)
     else:
         return OptionMenu(tab, drop_menu, *nm)
 
 
-def sql_strip(str):
-    return str.strip('()\',')
+def sql_strip(str_in):
+    return str_in.strip('()\',')
 
 
 window = Tk()
@@ -165,7 +165,7 @@ ttk.Label(tab3, text='Quantity:').grid(column=1, row=1, padx=15, pady=5)
 item_add = StringVar()
 item_entry = ttk.Entry(tab3, width=15, textvariable=item_add).grid(column=0, row=2, padx=15, pady=15)
 quantity_add = StringVar()
-quantity_entry = ttk.Entry(tab3, width=15, textvariable=quantity_add).grid(column=1, row=2, padx=15, pady=15)
+ttk.Entry(tab3, width=15, textvariable=quantity_add).grid(column=1, row=2, padx=15, pady=15)
 loc_add1 = StringVar()
 create_display_menu(tab3, loc_add1).grid(column=2, row=0)
 ttk.Button(tab3, text="Add", command=lambda: add_items(item_add.get(), quantity_add.get(), loc_add1.get())).grid(
@@ -178,7 +178,7 @@ ttk.Label(tab4, text='Quantity:').grid(column=1, row=1, padx=15, pady=5)
 remove_item = StringVar()
 remove_itemname = ttk.Entry(tab4, width=15, textvariable=remove_item).grid(column=0, row=2, padx=15, pady=15)
 quantity_remove = StringVar()
-quantity_entry = ttk.Entry(tab4, width=15, textvariable=quantity_remove).grid(column=1, row=2, padx=15, pady=15)
+ttk.Entry(tab4, width=15, textvariable=quantity_remove).grid(column=1, row=2, padx=15, pady=15)
 item_del = StringVar()
 create_display_menu(tab4, item_del).grid(column=2, row=0)
 ttk.Button(tab4, text="Remove Items",
@@ -192,8 +192,8 @@ ttk.Label(tab5, text='Item name:').grid(column=0, row=1, padx=15, pady=5)
 name_transfer = StringVar()
 name_entry = ttk.Entry(tab5, width=15, textvariable=name_transfer).grid(column=1, row=1, padx=15, pady=5)
 ttk.Label(tab5, text='Quantity:').grid(column=0, row=2, padx=15, pady=5)
-quantity_tranfer = StringVar()
-quantity_entry = ttk.Entry(tab5, width=15, textvariable=quantity_tranfer).grid(column=1, row=2, padx=15, pady=5)
+quantity_transfer = StringVar()
+ttk.Entry(tab5, width=15, textvariable=quantity_transfer).grid(column=1, row=2, padx=15, pady=5)
 ttk.Label(tab5, text='From:').grid(column=0, row=3, padx=15, pady=5)
 transfer_from = StringVar()
 create_display_menu(tab5, transfer_from).grid(column=1, row=3)
@@ -201,8 +201,9 @@ ttk.Label(tab5, text='To:').grid(column=0, row=4, padx=15, pady=5)
 transfer_to = StringVar()
 create_display_menu(tab5, transfer_to).grid(column=1, row=4)
 ttk.Button(tab5, text='Transfer',
-           command=lambda: transfer(name_transfer.get(), quantity_tranfer.get(), transfer_from.get(),
+           command=lambda: transfer(name_transfer.get(), quantity_transfer.get(), transfer_from.get(),
                                     transfer_to.get())).grid(column=2, row=4, padx=15, pady=5)
+
 
 # runs main loop
 window.mainloop()
